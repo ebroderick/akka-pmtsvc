@@ -2,10 +2,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.emb</groupId>
-  <artifactId>akka-pmtsvc</artifactId>
+  <artifactId>akka-pmtsvc-parent</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <scm>
     <developerConnection>scm:git:https://github.com/ebroderick/akka-pmtsvc.git</developerConnection>
   </scm>
+  <modules>
+    <module>akka-pmtsvc</module>
+  </modules>
 </project>

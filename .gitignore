@@ -1,1 +1,7 @@
-target/
+# Maven #
+target
+
+# IntelliJ #
+*.iml
+.idea
+atlassian-ide-plugin.xml
