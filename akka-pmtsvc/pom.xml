@@ -30,6 +30,21 @@
           <scalaVersion>${scala.version}</scalaVersion>
         </configuration>
       </plugin>
+        <plugin>
+          <groupId>org.scalaxb</groupId>
+          <artifactId>scalaxb-maven-plugin</artifactId>
+          <configuration>
+            <packageName>org.emb.pmt.domain</packageName>
+          </configuration>
+          <executions>
+            <execution>
+              <id>scalaxb</id>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
     </plugins>
   </build>
   <dependencies>

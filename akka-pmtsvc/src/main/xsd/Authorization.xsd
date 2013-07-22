@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    attributeFormDefault="unqualified" targetNamespace="http://pmt.emb.org/authorization"
+    xmlns="http://pmt.emb.org/authorization" version="1.2">
+
+    <xsd:element name="AuthorizationRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="CardNumber" type="xsd:string" />
+                <xsd:element name="ExpirationDate" type="xsd:string" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
