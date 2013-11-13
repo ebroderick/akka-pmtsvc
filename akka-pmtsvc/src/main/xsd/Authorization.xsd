@@ -12,4 +12,27 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="AuthorizationResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="ResponseCode">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="APPROVED"/>
+                            <xsd:enumeration value="DECLINED"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ErrorResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Error" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
 </xsd:schema>
