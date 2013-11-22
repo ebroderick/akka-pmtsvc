@@ -17,7 +17,8 @@ class HttpConsumer extends Actor with ActorLogging with Consumer {
   implicit val askTimeout = Timeout(10 seconds)
 
   //camel endpoint for this actor
-  def endpointUri = "jetty:http://localhost:8811/httpConsumer"
+  //def endpointUri = "jetty:http://localhost:8811/httpConsumer"
+  def endpointUri = "servlet:///pmtsvc"
 
   def receive = {
     //ask payment processor, pipe the response back to the sender
