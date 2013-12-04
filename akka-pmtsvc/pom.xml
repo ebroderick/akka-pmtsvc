@@ -51,7 +51,7 @@
           <groupId>org.scalaxb</groupId>
           <artifactId>scalaxb-maven-plugin</artifactId>
           <configuration>
-            <packageName>org.emb.pmt.domain</packageName>
+            <packageName>akkapmtsvc.domain</packageName>
           </configuration>
           <executions>
             <execution>

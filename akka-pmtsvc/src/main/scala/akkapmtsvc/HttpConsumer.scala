@@ -1,4 +1,4 @@
-package org.emb.pmt
+package akkapmtsvc
 
 import akka.actor.{ActorRef, Props, ActorLogging, Actor}
 import akka.pattern.{ask, pipe}

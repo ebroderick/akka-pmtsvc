@@ -1,4 +1,4 @@
-package org.emb.pmt.it
+package akkapmtsvc.it
 
 import org.scalatest.junit.AssertionsForJUnit
 import org.junit.Assert._

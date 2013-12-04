@@ -5,7 +5,7 @@
          id="payment-service" version="2.5">
 
     <listener>
-        <listener-class>org.emb.pmt.web.Initializer</listener-class>
+        <listener-class>akkapmtsvc.web.Initializer</listener-class>
     </listener>
 
     <servlet>

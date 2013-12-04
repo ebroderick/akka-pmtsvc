@@ -1,9 +1,9 @@
-package org.emb.pmt
+package akkapmtsvc
 
 import akka.actor.{Props, ActorRef, ActorLogging, Actor}
 import akka.pattern.{ask, pipe}
 import domain._
-import org.emb.pmt.MessageValidator.{ValidationRequest, ValidationResponse}
+import akkapmtsvc.MessageValidator.{ValidationRequest, ValidationResponse}
 import akka.util.Timeout
 import scala.concurrent.duration._
 

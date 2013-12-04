@@ -1,4 +1,4 @@
-package org.emb.pmt
+package akkapmtsvc
 
 import akka.actor.{Props, ActorSystem}
 import akka.testkit.{TestKit, TestActorRef, ImplicitSender}

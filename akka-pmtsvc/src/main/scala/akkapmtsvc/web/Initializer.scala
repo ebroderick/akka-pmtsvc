@@ -1,8 +1,8 @@
-package org.emb.pmt.web
+package akkapmtsvc.web
 
 import javax.servlet.{ServletContextEvent, ServletContextListener}
 import akka.actor.{Props, ActorSystem}
-import org.emb.pmt.HttpConsumer
+import akkapmtsvc.HttpConsumer
 import akka.camel.CamelExtension
 import scala.concurrent.Await
 import scala.concurrent.duration._

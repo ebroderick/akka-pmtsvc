@@ -1,4 +1,4 @@
-package org.emb.pmt
+package akkapmtsvc
 
 import akka.actor.{ActorLogging, Actor}
 import org.xml.sax.{InputSource}

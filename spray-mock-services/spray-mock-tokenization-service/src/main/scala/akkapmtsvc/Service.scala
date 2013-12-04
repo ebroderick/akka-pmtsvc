@@ -1,4 +1,4 @@
-package org.akkapmtsvc
+package akkapmtsvc
 
 import spray.routing._
 import spray.http._

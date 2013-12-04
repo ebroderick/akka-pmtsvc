@@ -1,4 +1,4 @@
-package org.akkapmtsvc
+package akkapmtsvc
 
 import akka.actor.{Props, ActorSystem}
 import spray.servlet.WebBoot

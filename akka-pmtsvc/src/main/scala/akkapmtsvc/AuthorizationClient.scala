@@ -1,7 +1,7 @@
-package org.emb.pmt
+package akkapmtsvc
 
 import akka.actor.{ActorLogging, Actor}
-import org.emb.pmt.domain.{APPROVED, DECLINED, AuthorizationResponse, AuthorizationRequest}
+import akkapmtsvc.domain.{APPROVED, DECLINED, AuthorizationResponse, AuthorizationRequest}
 
 class AuthorizationClient extends Actor with ActorLogging {
   def receive = {
