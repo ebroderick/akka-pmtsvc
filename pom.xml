@@ -10,5 +10,6 @@
   </scm>
   <modules>
     <module>akka-pmtsvc</module>
+    <module>spray-mock-services</module>
   </modules>
 </project>
