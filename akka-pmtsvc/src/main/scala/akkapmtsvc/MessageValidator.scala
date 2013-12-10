@@ -30,11 +30,11 @@ class MessageValidator(schemaPath: String) extends Actor with ActorLogging {
 
   def receive = {
     case validationRequest: ValidationRequest => sender ! validate(validationRequest)
-    case request: Any => log.error("unexpected request: {}", Array(request.getClass.toString))
+    case request: Any => log.error(s"unexpected request: ${request.getClass.toString}")
   }
 
   def validate(request: ValidationRequest): ValidationResponse = {
-    log.debug("validating request: {}", Array(request.message))
+    log.debug(s"validating request: ${request.message}")
 
     try {
       val is = new InputSource(new ByteArrayInputStream(request.message.getBytes("UTF-8")))

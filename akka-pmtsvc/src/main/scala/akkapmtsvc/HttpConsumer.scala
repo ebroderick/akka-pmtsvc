@@ -23,10 +23,10 @@ class HttpConsumer extends Actor with ActorLogging with Consumer {
     //ask payment processor, pipe the response back to the sender
     case msg: CamelMessage =>
       val body = msg.bodyAs[String]
-      log.debug("processing request:\n {}", Array(body))
+      log.debug(s"processing request:\n ${body}")
       paymentProcessor ? body pipeTo sender
 
     case request: Any =>
-      log.error("unexpected request: {}", Array(request.getClass.toString))
+      log.error(s"unexpected request: ${request.getClass.toString}")
   }
 }

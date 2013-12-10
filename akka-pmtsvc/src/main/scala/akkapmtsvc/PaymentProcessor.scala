@@ -12,31 +12,47 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class PaymentProcessor extends Actor with ActorLogging {
   //actorRef for the MessageValidator actor
-  val messageValidator: ActorRef =
+  val messageValidator =
     context.actorOf(Props(classOf[MessageValidator], "Authorization.xsd"), "MessageValidator")
+
+  //actorRef for the AuthorizationClient actor
+  val authorizationClient = context.actorOf(Props[AuthorizationClient], "AuthorizationClient")
 
   //implicit timeout for ask pattern
   implicit val askTimeout = Timeout(10 seconds)
 
   def receive = {
     case requestString: String =>
-      messageValidator ? ValidationRequest(requestString) map {validationResponse =>
-        validationResponse match {
+      try {
+        //unmarshal the request
+        val authRequest = unmarshalAuthorizationRequest(requestString)
 
-          case ValidationResponse(true) =>
-            val authRequest = unmarshalAuthorizationRequest(requestString)
-            val authResponse = authRequest.CardNumber match {
-              case "4111111111111111" => AuthorizationResponse(APPROVED)
-              case _ => AuthorizationResponse(DECLINED)
-            }
-            marshalAuthorizationResponse(authResponse)
+        //set up futures
+        val validationFuture = (messageValidator ? ValidationRequest(requestString)).mapTo[ValidationResponse]
+        val authorizationFuture = (authorizationClient ? authRequest).mapTo[AuthorizationResponse]
 
-          case _ => marshalErrorResponse(ErrorResponse("Request failed schema validation"))
-        }
+        //for comprehension for futures, run in parallel
+        val result =
+          for {
+            validationResponse <- validationFuture
+            authResponse <- authorizationFuture
+          } yield createResponse(validationResponse, authResponse)
 
-      } pipeTo sender
+        //pipe the response back to the sender
+        result pipeTo sender
 
-    case _ => marshalErrorResponse(ErrorResponse("Invalid Request"))
+      } catch {
+        case ex: Exception => sender ! marshalErrorResponse(ErrorResponse("Invalid Request"))
+      }
+
+    case _ => sender ! marshalErrorResponse(ErrorResponse("Invalid Request"))
+  }
+
+  def createResponse(validationResponse: ValidationResponse, authResponse: AuthorizationResponse) =  {
+    validationResponse match {
+      case ValidationResponse(true) => marshalAuthorizationResponse(AuthorizationResponse(APPROVED))
+      case _ => marshalErrorResponse(ErrorResponse("Request failed schema validation"))
+    }
   }
 
   def unmarshalAuthorizationRequest(xmlString: String): AuthorizationRequest =
@@ -47,5 +63,4 @@ class PaymentProcessor extends Actor with ActorLogging {
 
   def marshalErrorResponse(errorResponse: ErrorResponse): String =
     scalaxb.toXML[ErrorResponse](errorResponse.copy(), "ErrorResponse", defaultScope).toString
-
 }

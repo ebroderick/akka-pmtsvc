@@ -6,7 +6,13 @@
     <xsd:element name="AuthorizationRequest">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="CardNumber" type="xsd:string" />
+                <xsd:element name="CardNumber">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:maxLength value="20"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
                 <xsd:element name="ExpirationDate" type="xsd:string" />
             </xsd:sequence>
         </xsd:complexType>
