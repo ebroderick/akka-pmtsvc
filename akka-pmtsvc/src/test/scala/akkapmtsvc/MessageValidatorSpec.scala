@@ -21,7 +21,6 @@ class MessageValidatorSpec extends TestKit(ActorSystem("MessageValidatorSpec"))
                   <ExpirationDate>2014-02</ExpirationDate>
                 </AuthorizationRequest>
 
-
       actor ! ValidationRequest(xml.toString())
       expectMsg(ValidationResponse(true))
     }

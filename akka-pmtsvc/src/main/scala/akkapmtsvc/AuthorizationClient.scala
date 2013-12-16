@@ -7,8 +7,8 @@ class AuthorizationClient extends Actor with ActorLogging {
   def receive = {
     case request: AuthorizationRequest =>
       request.CardNumber match {
-        case "4111111111111111" => sender ! AuthorizationResponse(APPROVED)
-        case _ => sender ! AuthorizationResponse(DECLINED)
+        case "4111111111111111" => sender ! AuthorizationResponse(APPROVED, "")
+        case _ => sender ! AuthorizationResponse(DECLINED, "")
       }
   }
 }

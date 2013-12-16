@@ -1,9 +1,10 @@
 package akkapmtsvc
 
-import akka.actor.{Props, ActorRef, ActorLogging, Actor}
+import akka.actor.{Props, ActorLogging, Actor}
 import akka.pattern.{ask, pipe}
 import domain._
 import akkapmtsvc.MessageValidator.{ValidationRequest, ValidationResponse}
+import akkapmtsvc.TokenizationClient.{TokenizationRequest, TokenizationResponse}
 import akka.util.Timeout
 import scala.concurrent.duration._
 
@@ -18,6 +19,9 @@ class PaymentProcessor extends Actor with ActorLogging {
   //actorRef for the AuthorizationClient actor
   val authorizationClient = context.actorOf(Props[AuthorizationClient], "AuthorizationClient")
 
+  //actorRef for the TokenizationClient actor
+  val tokenizationClient = context.actorOf(Props[TokenizationClient], "TokenizationClient")
+
   //implicit timeout for ask pattern
   implicit val askTimeout = Timeout(10 seconds)
 
@@ -28,15 +32,17 @@ class PaymentProcessor extends Actor with ActorLogging {
         val authRequest = unmarshalAuthorizationRequest(requestString)
 
         //set up futures
-        val validationFuture = (messageValidator ? ValidationRequest(requestString)).mapTo[ValidationResponse]
-        val authorizationFuture = (authorizationClient ? authRequest).mapTo[AuthorizationResponse]
+        val validationFuture = (messageValidator ? ValidationRequest(requestString))
+        val authorizationFuture = (authorizationClient ? authRequest)
+        val tokenizationFuture = (tokenizationClient ? TokenizationRequest(authRequest.CardNumber))
 
-        //for comprehension for futures, run in parallel
+        //for comprehension for futures, futures below run in parallel
         val result =
           for {
-            validationResponse <- validationFuture
-            authResponse <- authorizationFuture
-          } yield createResponse(validationResponse, authResponse)
+            validationResponse <- validationFuture.mapTo[ValidationResponse]
+            authResponse <- authorizationFuture.mapTo[AuthorizationResponse]
+            tokenizationResponse <- tokenizationFuture.mapTo[TokenizationResponse]
+          } yield createResponse(validationResponse, authResponse, tokenizationResponse)
 
         //pipe the response back to the sender
         result pipeTo sender
@@ -48,9 +54,13 @@ class PaymentProcessor extends Actor with ActorLogging {
     case _ => sender ! marshalErrorResponse(ErrorResponse("Invalid Request"))
   }
 
-  def createResponse(validationResponse: ValidationResponse, authResponse: AuthorizationResponse) =  {
-    validationResponse match {
-      case ValidationResponse(true) => marshalAuthorizationResponse(AuthorizationResponse(APPROVED))
+  def createResponse(validationResp: ValidationResponse, authResp: AuthorizationResponse,
+      tokenizationResp: TokenizationResponse) =  {
+
+    (validationResp, authResp, tokenizationResp) match {
+      case (ValidationResponse(true), _, _) =>
+        marshalAuthorizationResponse(authResp.copy(Token = tokenizationResp.token))
+
       case _ => marshalErrorResponse(ErrorResponse("Request failed schema validation"))
     }
   }

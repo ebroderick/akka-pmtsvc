@@ -1,7 +1,6 @@
 package akkapmtsvc
 
 import akka.actor.{ActorLogging, Actor}
-import scala.Array
 
 object TokenizationClient {
   case class TokenizationRequest(primaryAccountNumber: String)
@@ -12,7 +11,16 @@ class TokenizationClient extends Actor with ActorLogging {
   import TokenizationClient._
 
   def receive = {
-    case tokenizationRequest: TokenizationClient => sender ! TokenizationResponse("token")
-    case request: Any => log.error("unexpected request: {}", Array(request.getClass.toString))
+    case tokenizationRequest: TokenizationRequest =>
+      sender ! TokenizationResponse(tokenize(tokenizationRequest.primaryAccountNumber))
+
+    case default => log.error(s"unexpected request: ${default}")
+  }
+
+  def tokenize(accountNumber: String) = {
+    accountNumber.zipWithIndex.map {
+      case (e, i) if i > 5 && i < 12 => 'X'
+      case (e, i) => e
+    }.mkString
   }
 }

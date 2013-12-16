@@ -26,7 +26,8 @@ class PaymentProcessorSpec extends TestKit(ActorSystem("PaymentProcessorSpec"))
       expectMsg("<AuthorizationResponse xmlns=\"http://pmt.emb.org/authorization\" " +
         "xmlns:tns=\"http://pmt.emb.org/authorization\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" " +
         "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
-        "<ResponseCode>APPROVED</ResponseCode></AuthorizationResponse>")
+        "<ResponseCode>APPROVED</ResponseCode><Token>411111XXXXXX1111</Token>" +
+        "</AuthorizationResponse>")
     }
 
     "reject malformed messages" in {

@@ -26,7 +26,7 @@ class HttpConsumer extends Actor with ActorLogging with Consumer {
       log.debug(s"processing request:\n ${body}")
       paymentProcessor ? body pipeTo sender
 
-    case request: Any =>
-      log.error(s"unexpected request: ${request.getClass.toString}")
+    case default =>
+      log.error(s"unexpected request: ${default.getClass.toString}")
   }
 }

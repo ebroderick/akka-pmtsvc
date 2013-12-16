@@ -30,7 +30,7 @@ class MessageValidator(schemaPath: String) extends Actor with ActorLogging {
 
   def receive = {
     case validationRequest: ValidationRequest => sender ! validate(validationRequest)
-    case request: Any => log.error(s"unexpected request: ${request.getClass.toString}")
+    case default => log.error(s"unexpected request: ${default.getClass.toString}")
   }
 
   def validate(request: ValidationRequest): ValidationResponse = {
